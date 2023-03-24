@@ -12,9 +12,10 @@ export class ScannerPage implements OnInit {
   encodeData: any;
   inputData: any;
   constructor(private barcodeScanner: BarcodeScanner) { }
-  ngOnInit(): void {
-    throw new Error('Method not implemented.');
+  ngOnInit() {
+ 
   }
+
   scanBarcode() {
     const options: BarcodeScannerOptions = {
       preferFrontCamera: false,
@@ -29,8 +30,7 @@ export class ScannerPage implements OnInit {
 
     this.barcodeScanner.scan(options).then(barcodeData => {
       console.log('Barcode data', barcodeData);
-      this.scannedData = barcodeData;
-
+      this.scannedData = barcodeData.text;
     }).catch(err => {
       console.log('Error', err);
     });
