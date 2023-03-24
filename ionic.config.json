@@ -1,0 +1,7 @@
+{
+  "name": "scanDoc",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "angular"
+}
