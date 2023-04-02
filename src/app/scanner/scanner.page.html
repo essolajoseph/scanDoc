@@ -21,7 +21,7 @@
           <ion-card-title>Document authentique</ion-card-title>
         </ion-card-header>
         <ion-card-content>
-          <ion-button expand="block" [routerLink]="['/releve']" color="success">Get document</ion-button>
+          <ion-button expand="block" routerLink="/releve" [queryParams]="{user:'Essola Essola Joseph Julien', matricule:scannedData}" color="success">Get document</ion-button>
         </ion-card-content>
       </ion-card>
     </div>

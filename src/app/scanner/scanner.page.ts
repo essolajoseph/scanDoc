@@ -5,6 +5,7 @@ import { DataService } from '../api/data.service';
 import { Observable, tap } from 'rxjs';
 import { Releves } from 'src/models/data.model';
 import { LoadingController } from '@ionic/angular';
+import { NavigationExtras, Router } from '@angular/router';
 @Component({
   selector: 'app-scanner',
   templateUrl: './scanner.page.html',
@@ -24,8 +25,12 @@ export class ScannerPage implements OnInit {
    text='';
    color="";
   test=["19G2521","20R2198","20U4660"];
+  rsc={
+    "name": "Davide Ezo\'o",
+    "matricule":"20R2198",
+  }
   apiUrl='https://script-en-ligne.herokuapp.com/getUser.php'
-  constructor(private barcodeScanner: BarcodeScanner,private http:HttpClient, private dataService:DataService, private loadindCrtl:LoadingController) { 
+  constructor(private barcodeScanner: BarcodeScanner,private http:HttpClient, private dataService:DataService, private loadindCrtl:LoadingController, private router:Router) { 
     // this.http.get('https://script-en-ligne.herokuapp.com/getUser.php').subscribe(()=>{
     //   console.log;
     // })
@@ -51,12 +56,18 @@ export class ScannerPage implements OnInit {
     this.barcodeScanner.scan(options).then(barcodeData => {
       console.log('Barcode data', barcodeData);
       this.scannedData = barcodeData.text;
-       if(this.scannedData=="20R2198" || this.scannedData=="19G2521")
+       if(this.scannedData=="20R2198")
      {  this.text='Document Authentique'
         this.color="sucess";
        this.buton=true;
        this.buto=false;
-     }     
+     }   
+    else if(this.scannedData=="19G2521")
+     {  this.text='Document Authentique'
+        this.color="sucess";
+       this.buton=true;
+       this.buto=false;
+     }   
        else
       { this.text = 'Document non Authentique';
         this.color="danger";
@@ -67,7 +78,7 @@ export class ScannerPage implements OnInit {
     }).catch(err => {
       console.log('Error', err);
     });
-   
+    // this.buton=true;
   }
 
     async verify(){
@@ -111,10 +122,6 @@ export class ScannerPage implements OnInit {
     this.success=false;
 
    }
-
-  }
-
-  getdocument(){
 
   }
 }
