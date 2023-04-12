@@ -11,10 +11,13 @@ import{ HttpClientModule} from '@angular/common/http';
 import { DocumentScanner } from '@ionic-native/document-scanner/ngx';
 import { WebView } from '@ionic-native/ionic-webview/ngx';
 import { Camera } from '@ionic-native/camera/ngx';
+import { File } from '@ionic-native/file/ngx';
+
+
 @NgModule({
   declarations: [AppComponent],
   imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule,HttpClientModule],
-  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy },BarcodeScanner,DocumentScanner,WebView,Camera],
+  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy },BarcodeScanner,DocumentScanner,WebView,Camera,File],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
