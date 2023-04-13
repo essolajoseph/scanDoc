@@ -8,8 +8,9 @@ import { from } from 'rxjs';
   templateUrl: './upload.page.html',
   styleUrls: ['./upload.page.scss'],
 })
-export class UploadPage implements OnInit {
+export class UploadPage {
   client: TextractClient;
+  image: any;
   
   constructor(private camera: Camera) {
     this.client = new TextractClient({
@@ -21,9 +22,7 @@ export class UploadPage implements OnInit {
     });
   }
 
-  ngOnInit(): void {
-    throw new Error('Method not implemented.');
-  }
+
 
   async takePicture() {
     try {
@@ -56,8 +55,8 @@ export class UploadPage implements OnInit {
     try {
       const response = await from(this.client.send(command)).toPromise();
       const textBlocks = response?.Blocks?.filter(b => b.BlockType === 'LINE') ?? [];
+      alert(textBlocks);
       const text = textBlocks.map(tb => tb.Text).join(' ');
-      // alert(response);
       alert(text);
     } catch (err) {
       alert(err);
@@ -73,4 +72,22 @@ export class UploadPage implements OnInit {
     }
     return bytes.buffer;
   }
+
+  async addPhoto() {
+    const libraryImage = await this.openLibrary();
+      alert(libraryImage);
+      await this.sendImageToApi(libraryImage);
+}
+async openLibrary() {
+  const options: CameraOptions = {
+    quality: 100,
+    destinationType: this.camera.DestinationType.DATA_URL,
+    encodingType: this.camera.EncodingType.JPEG,
+    mediaType: this.camera.MediaType.PICTURE,
+    targetWidth: 1000,
+    targetHeight: 1000,
+    sourceType: this.camera.PictureSourceType.PHOTOLIBRARY
+  };
+  return await this.camera.getPicture(options);
+}
 }

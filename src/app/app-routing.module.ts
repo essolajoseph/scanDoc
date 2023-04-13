@@ -20,10 +20,6 @@ const routes: Routes = [
     loadChildren: () => import('./releve/releve.module').then( m => m.RelevePageModule)
   },
   {
-    path: 'scanocr',
-    loadChildren: () => import('./scanocr/scanocr.module').then( m => m.ScanocrPageModule)
-  },
-  {
     path: 'upload',
     loadChildren: () => import('./upload/upload.module').then( m => m.UploadPageModule)
   },
