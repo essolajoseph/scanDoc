@@ -23,6 +23,10 @@ const routes: Routes = [
     path: 'upload',
     loadChildren: () => import('./upload/upload.module').then( m => m.UploadPageModule)
   },
+  {
+    path: 'correction',
+    loadChildren: () => import('./correction/correction.module').then( m => m.CorrectionPageModule)
+  },
 ];
 
 @NgModule({
