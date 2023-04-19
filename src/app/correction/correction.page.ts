@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { OrthographeService } from '../api/text-dection.service';
-import * as dictionnaire from '../../assets/dictionnaire/dictionnaire.json'
 import { HttpClient } from '@angular/common/http';
 
 @Component({
@@ -10,7 +9,7 @@ import { HttpClient } from '@angular/common/http';
 })
 export class CorrectionPage  {
   
-  texte = 'je seus m0lady je laissb mpn ordin9teor je foqs kct2p1';
+  texte = 'je seus m0lady a ktc201';
   erreurs:any;
   dictionnaire?: Set<string>;
 

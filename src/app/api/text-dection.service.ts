@@ -35,12 +35,17 @@ export class OrthographeService {
 
   private getCorrection(mot: string): string {
     let correction = '';
-    let distanceMin = 3;
+    let distanceMin =0;
+    if(mot.length<3)
+     distanceMin=1;
+     else
+     distanceMin=3;
     for (const motDuDico of this.dictionnaire!) {
       const distance = this.distanceLevenshtein(mot, motDuDico);
-      if (distance < distanceMin) {
-        distanceMin = distance;
+      if (distance <=distanceMin) {
+        // distanceMin = distance;
         correction = motDuDico;
+    
       }
     }
     return correction;

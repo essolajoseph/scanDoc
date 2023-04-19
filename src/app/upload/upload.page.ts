@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
 import { TextractClient, AnalyzeDocumentCommand } from '@aws-sdk/client-textract';
 import { from } from 'rxjs';
+import { OrthographeService } from '../api/text-dection.service';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-upload',
@@ -11,14 +13,22 @@ import { from } from 'rxjs';
 export class UploadPage {
   client: TextractClient;
   image: any;
-  
-  constructor(private camera: Camera) {
+  texte = 'je seus m0lady je laissb mpn ordin9teor je foqs kct et ict20z';
+  erreurs:any;
+  dictionnaire?: Set<string>;
+
+  constructor(private camera: Camera,private orthographeService: OrthographeService,private http: HttpClient) {
     this.client = new TextractClient({
       region: "us-east-1",
       credentials: {
         accessKeyId: "AKIAZDHOG23RVZA73SMG",
         secretAccessKey: "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"
       }
+    });
+
+    this.http.get<string[]>('../../assets/dictionnaire/dictionnaire.json').subscribe(mots => {
+      this.dictionnaire = new Set<string>(mots);
+      console.log(this.dictionnaire);
     });
   }
 
@@ -33,7 +43,6 @@ export class UploadPage {
         mediaType: this.camera.MediaType.PICTURE,
       };
       const imageData = await this.camera.getPicture(options);
-      alert(imageData);
       await this.sendImageToApi(imageData);
     } catch (err) {
       console.log(err);
@@ -55,9 +64,10 @@ export class UploadPage {
     try {
       const response = await from(this.client.send(command)).toPromise();
       const textBlocks = response?.Blocks?.filter(b => b.BlockType === 'LINE') ?? [];
-      alert(textBlocks);
       const text = textBlocks.map(tb => tb.Text).join(' ');
       alert(text);
+      this.texte=this.orthographeService.corrigerTexte(text);
+      alert(this.texte);
     } catch (err) {
       alert(err);
     }
