@@ -77,7 +77,7 @@ export class UploadPage {
       let info=this.getInfo.extraireInformations(text);
       if(info!=null){
         loading.dismiss();
-        alert(info.numeroReleve);
+        alert("Filiere :"+info.filiere+"\n faculte :"+info.faculte+"\n matricule :"+info.matricule+"\n niveau :"+info.niveau+"\nnumero du releve :"+info.numeroReleve+"\nannee Scolaire :"+info.annee+"\nmgp :"+info.mgp+"\ndecision :"+info.decision+"\n");
         console.log(info)
       }
       
@@ -98,7 +98,6 @@ export class UploadPage {
 
   async addPhoto() {
     const libraryImage = await this.openLibrary();
-      alert(libraryImage);
       await this.sendImageToApi(libraryImage);
 }
 async openLibrary() {
