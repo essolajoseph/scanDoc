@@ -4,6 +4,11 @@ import { TextractClient, AnalyzeDocumentCommand } from '@aws-sdk/client-textract
 import { from } from 'rxjs';
 import { OrthographeService } from '../api/text-dection.service';
 import { HttpClient } from '@angular/common/http';
+import { GetInformationService } from '../api/get-information.service';
+import { Information } from 'src/models/information.model';
+import { LoadingController } from '@ionic/angular';
+
+
 
 @Component({
   selector: 'app-upload',
@@ -13,11 +18,11 @@ import { HttpClient } from '@angular/common/http';
 export class UploadPage {
   client: TextractClient;
   image: any;
-  texte = 'je seus m0lady je laissb mpn ordin9teor je foqs kct et ict20z';
+  texte = '';
   erreurs:any;
   dictionnaire?: Set<string>;
 
-  constructor(private camera: Camera,private orthographeService: OrthographeService,private http: HttpClient) {
+  constructor(private camera: Camera,private getInfo:GetInformationService,private orthographeService: OrthographeService,private http: HttpClient,public loadingController: LoadingController) {
     this.client = new TextractClient({
       region: "us-east-1",
       credentials: {
@@ -50,6 +55,10 @@ export class UploadPage {
   }
 
   async sendImageToApi(imageData: string) {
+    const loading = await this.loadingController.create({
+      message: 'Please wait...',
+    });
+    await loading.present();
     const buffer = this.base64ToArrayBuffer(imageData);
     const bytes = new Uint8Array(buffer);
     alert(bytes);
@@ -65,11 +74,15 @@ export class UploadPage {
       const response = await from(this.client.send(command)).toPromise();
       const textBlocks = response?.Blocks?.filter(b => b.BlockType === 'LINE') ?? [];
       const text = textBlocks.map(tb => tb.Text).join(' ');
-      alert(text);
-      this.texte=this.orthographeService.corrigerTexte(text);
-      alert(this.texte);
+      let info=this.getInfo.extraireInformations(text);
+      if(info!=null){
+        loading.dismiss();
+        alert(info.numeroReleve);
+        console.log(info)
+      }
+      
     } catch (err) {
-      alert(err);
+      alert("Document pas clair!!!");
     }
   }
   

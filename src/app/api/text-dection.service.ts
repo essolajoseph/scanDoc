@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-
+import _ from 'lodash';
 
 
 @Injectable({
@@ -21,7 +21,7 @@ export class OrthographeService {
   }
 
   public corrigerTexte(texte: string): string {
-    const mots = texte.toLowerCase().split(/\W+/);
+    const mots = texte.toLowerCase().split(/\s+/);
     const motsCorriges: string[] = [];
     for (const mot of mots) {
       if (this.estCorrect(mot)) {
@@ -35,17 +35,21 @@ export class OrthographeService {
 
   private getCorrection(mot: string): string {
     let correction = '';
-    let distanceMin =0;
-    if(mot.length<3)
-     distanceMin=1;
-     else
-     distanceMin=3;
+    const distanceMin = 3; // distance de Levenshtein maximale autorisée
+    const candidats = [];
     for (const motDuDico of this.dictionnaire!) {
       const distance = this.distanceLevenshtein(mot, motDuDico);
       if (distance <=distanceMin) {
-        // distanceMin = distance;
-        correction = motDuDico;
-    
+        candidats.push({mot: motDuDico, distance: distance});
+        // console.log(mot);
+      }
+    }
+     
+    if (candidats.length > 0) {
+      const motPlusProche = _.minBy(candidats, 'distance');
+      if (motPlusProche) { // check if motPlusProche is defined
+        correction = motPlusProche.mot;
+        console.log(motPlusProche);
       }
     }
     return correction;
