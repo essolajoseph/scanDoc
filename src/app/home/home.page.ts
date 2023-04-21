@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { WebView } from '@ionic-native/ionic-webview/ngx';
 import { DocumentScanner, DocumentScannerOptions } from '@ionic-native/document-scanner/ngx';
 import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
+import { MyserviceService } from '../api/myservice.service';
 
 
 
@@ -16,10 +17,10 @@ export class HomePage implements OnInit {
    data: any;
   photo: any;
   selectedImage: any;
-  
+  info = {name:"dumbresh", email: 'John@gmail.com',password:"123"};
 
-  constructor(private http:HttpClient,private documentScanner: DocumentScanner, private webview: WebView,private camera:Camera) {
-     this.datas=this.http.get('http://localhost/test/API.php').subscribe((data)=>{
+  constructor(private http:HttpClient,private documentScanner: DocumentScanner, private webview: WebView,private camera:Camera,private myService: MyserviceService) {
+     this.datas=this.http.get('http://192.168.43.109:8000/api/users').subscribe((data)=>{
       console.log(data);
      });
     console.log(this.datas);
@@ -72,5 +73,13 @@ export class HomePage implements OnInit {
     }, () => {
     });
   }
+   
+  sendData() {
+    this.myService.sendData(this.info).subscribe((response:any) => {
+      console.log('Réponse du serveur:', response);
+      alert(response.name);
+    });
+  }
+
 }
 
