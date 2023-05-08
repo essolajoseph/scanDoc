@@ -55,6 +55,7 @@
     "@angular/compiler-cli": "^15.0.0",
     "@angular/language-service": "^15.0.0",
     "@ionic/angular-toolkit": "^8.0.0",
+    "@types/crypto-js": "^4.1.1",
     "@types/jasmine": "~4.0.0",
     "@types/lodash": "^4.14.194",
     "@types/node": "^12.11.1",
@@ -95,7 +96,6 @@
       "cordova-plugin-statusbar": {},
       "cordova-plugin-device": {},
       "cordova-plugin-splashscreen": {},
-      "cordova-plugin-ionic-webview": {},
       "cordova-plugin-ionic-keyboard": {},
       "cordova-plugin-document-scanner": {},
       "cordova-plugin-camera": {
@@ -103,11 +103,12 @@
       },
       "cordova-plugin-file": {
         "ANDROIDX_WEBKIT_VERSION": "1.4.0"
-      }
+      },
+      "cordova-plugin-ionic-webview": {}
     },
     "platforms": [
-      "android",
-      "browser"
+      "browser",
+      "android"
     ]
   }
 }

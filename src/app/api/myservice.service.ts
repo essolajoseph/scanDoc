@@ -6,7 +6,7 @@ import { Injectable } from '@angular/core';
 })
 export class MyserviceService {
 
-  apiUrl = 'http://192.168.43.109:8000/api';
+  apiUrl = 'http://192.168.43.108:8000/api';
 
   constructor(private http: HttpClient) { }
 

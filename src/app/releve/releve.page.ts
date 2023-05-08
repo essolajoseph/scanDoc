@@ -7,24 +7,18 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrls: ['./releve.page.scss'],
 })
 export class RelevePage implements OnInit {
-  activatedRoute: any;
-  myId: any;
-  user?: string | null;
-  matricule?: string | null;
-
+  donneesRecus:any;
+  releve:any;
+  notes:any;
+  etudiant: any;
   constructor(private router:Router, private route:ActivatedRoute) { }
 
   ngOnInit() {
- 
-    if(this.route.snapshot.queryParamMap.get('matricule')=='19G2521'){
-     this.user= 'Kanou Foku Keni Steve'
-      this.matricule=this.route.snapshot.queryParamMap.get('matricule');
-    }
-    else if(this.route.snapshot.queryParamMap.get('matricule')=='20R2198'){
-      this.user= 'David Ezo\'o'
-      this.matricule='20R2198';
-    }
-    console.log(this.user);
+    this.donneesRecus= history.state;
+      this.notes=this.donneesRecus.notes;
+      this.releve=this.donneesRecus.releve[0];
+      this.etudiant=this.donneesRecus.etudiant[0];
+      // alert(this.etudiant.nom);
   }
   
 }

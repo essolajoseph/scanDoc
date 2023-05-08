@@ -44,13 +44,6 @@ export class HomePage implements OnInit {
 
 
   callTextract(){
-   let etudiant =[
-    {
-      'name': 'Textract',
-      'email': 'essolajoseph7@gmail'
-    }
-   ]
-   
    this.http.post('https://script-en-ligne.herokuapp.com/uploads.php',this.photo,{headers:{ 'Content-Type':  'application/json'}}).subscribe((response: any) => {console.log(response);});
   }
 

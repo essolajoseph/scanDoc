@@ -3,11 +3,13 @@ import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
 import { TextractClient, AnalyzeDocumentCommand } from '@aws-sdk/client-textract';
 import { from } from 'rxjs';
 import { OrthographeService } from '../api/text-dection.service';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { GetInformationService } from '../api/get-information.service';
 import { Information } from 'src/models/information.model';
-import { LoadingController } from '@ionic/angular';
-
+import { LoadingController, NavController } from '@ionic/angular';
+import { MyserviceService } from '../api/myservice.service';
+import * as CryptoJS from 'crypto-js';
+import { WebView } from '@ionic-native/ionic-webview/ngx';
 
 
 @Component({
@@ -21,8 +23,12 @@ export class UploadPage {
   texte = '';
   erreurs:any;
   dictionnaire?: Set<string>;
-
-  constructor(private camera: Camera,private getInfo:GetInformationService,private orthographeService: OrthographeService,private http: HttpClient,public loadingController: LoadingController) {
+  info?:Information;
+  base64:any;
+  donneesRecus:any;
+  butonAuth=false;
+  buton=false;
+  constructor(private camera: Camera,private getInfo:GetInformationService,private orthographeService: OrthographeService,private http: HttpClient,public loadingController: LoadingController,private myService:MyserviceService,private navController: NavController,private webview: WebView) {
     this.client = new TextractClient({
       region: "us-east-1",
       credentials: {
@@ -47,8 +53,14 @@ export class UploadPage {
         encodingType: this.camera.EncodingType.JPEG,
         mediaType: this.camera.MediaType.PICTURE,
       };
-      const imageData = await this.camera.getPicture(options);
-      await this.sendImageToApi(imageData);
+      const imageData = await this.camera.getPicture(options).then((imageData) => {
+       this.base64='data:image/jpeg;base64,'+imageData;
+    
+        this.uploadPhoto();
+      }, (err) => {
+        console.log(err);
+      });
+      // await this.sendImageToApi(imageData);
     } catch (err) {
       console.log(err);
     }
@@ -61,7 +73,6 @@ export class UploadPage {
     await loading.present();
     const buffer = this.base64ToArrayBuffer(imageData);
     const bytes = new Uint8Array(buffer);
-    alert(bytes);
     const params = {
       Document: {
         Bytes: bytes,
@@ -74,11 +85,12 @@ export class UploadPage {
       const response = await from(this.client.send(command)).toPromise();
       const textBlocks = response?.Blocks?.filter(b => b.BlockType === 'LINE') ?? [];
       const text = textBlocks.map(tb => tb.Text).join(' ');
+      console.log(text);
       let info=this.getInfo.extraireInformations(text);
       if(info!=null){
         loading.dismiss();
-        alert("Filiere :"+info.filiere+"\n faculte :"+info.faculte+"\n matricule :"+info.matricule+"\n niveau :"+info.niveau+"\nnumero du releve :"+info.numeroReleve+"\nannee Scolaire :"+info.annee+"\nmgp :"+info.mgp+"\ndecision :"+info.decision+"\n");
-        console.log(info)
+      console.log("Filiere :"+info.filiere+"\n faculte :"+info.faculte+"\n matricule :"+info.matricule+"\n niveau :"+info.niveau+"\nnumero du releve :"+info.numeroReleve+"\nannee Scolaire :"+info.annee+"\nmgp :"+info.mgp+"\ndecision :"+info.decision+"\n");
+       this.sendData(info);
       }
       
     } catch (err) {
@@ -98,7 +110,7 @@ export class UploadPage {
 
   async addPhoto() {
     const libraryImage = await this.openLibrary();
-      await this.sendImageToApi(libraryImage);
+      // await this.sendImageToApi(libraryImage);
 }
 async openLibrary() {
   const options: CameraOptions = {
@@ -110,6 +122,60 @@ async openLibrary() {
     targetHeight: 1000,
     sourceType: this.camera.PictureSourceType.PHOTOLIBRARY
   };
-  return await this.camera.getPicture(options);
+  return await this.camera.getPicture(options).then((imageData) => {
+    this.base64='data:image/jpeg;base64,'+imageData;
+     this.uploadPhoto();
+   }, (err) => {
+     console.log(err);
+   });;
+}
+    
+sendData(info:Information) {
+  const jsonData = JSON.stringify(info);
+  const secretKey = 'MaCléSecrète';
+  const hmac = CryptoJS.HmacSHA256(jsonData, secretKey).toString();
+  this.myService.sendData({info,hmac}).subscribe((response:any) => {
+    console.log('Réponse du serveur:', response);
+    if(response==info.matricule)
+    alert("Document Authentique");
+    else
+    alert("Document Non Authentque");
+  });
+}
+
+  async uploadPhoto() {
+  const loading = await this.loadingController.create({
+    message: 'Please wait...',
+  });
+  await loading.present();
+  const url = 'http://192.168.43.108:8000/api/endpoint';
+  const headers = new HttpHeaders();
+  headers.append('Content-Type', 'multipart/form-data');
+  headers.append('Accept', 'application/json');
+  let formData=new FormData();
+  formData.append('file',this.base64);
+  console.log(formData);
+  this.http.post(url, formData, { headers }).subscribe((response:any)=> {
+    console.log('La photo a été envoyée avec succès',response);
+    loading.dismiss();
+    if(response!=null) {
+      this.donneesRecus=response;
+      this.butonAuth=true;
+      this.buton=false;
+      console.log(response[0].etudiant);
+    }
+   
+  }, error => {
+    console.log('Erreur lors de l\'envoi de la photo', error);
+    this.buton=true;
+    this.butonAuth=false;
+    loading.dismiss();
+  });
+
+
+}
+
+sendReceiveData(){
+  this.navController.navigateForward('/releve', { state: this.donneesRecus });   
 }
 }
