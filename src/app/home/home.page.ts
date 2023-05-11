@@ -4,7 +4,7 @@ import { WebView } from '@ionic-native/ionic-webview/ngx';
 import { DocumentScanner, DocumentScannerOptions } from '@ionic-native/document-scanner/ngx';
 import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
 import { MyserviceService } from '../api/myservice.service';
-
+import { Platform } from '@ionic/angular';
 
 
 @Component({
@@ -19,8 +19,8 @@ export class HomePage implements OnInit {
   selectedImage: any;
   info = {name:"dumbresh", email: 'John@gmail.com',password:"123"};
 
-  constructor(private http:HttpClient,private documentScanner: DocumentScanner, private webview: WebView,private camera:Camera,private myService: MyserviceService) {
-     this.datas=this.http.get('http://192.168.43.109:8000/api/users').subscribe((data)=>{
+  constructor(private http:HttpClient,private documentScanner: DocumentScanner, private webview: WebView,private camera:Camera,private myService: MyserviceService,private platform: Platform) {
+     this.datas=this.http.get('http://192.168.43.108:8000/api/users').subscribe((data)=>{
       console.log(data);
      });
     console.log(this.datas);
@@ -40,11 +40,6 @@ export class HomePage implements OnInit {
     this.selectedImage = `data:image/jpeg;base64,${finalImage}`;
   })
   .catch((error: any) => console.error(error));
-  }
-
-
-  callTextract(){
-   this.http.post('https://script-en-ligne.herokuapp.com/uploads.php',this.photo,{headers:{ 'Content-Type':  'application/json'}}).subscribe((response: any) => {console.log(response);});
   }
 
   getPicture(){
@@ -73,6 +68,9 @@ export class HomePage implements OnInit {
       alert(response.name);
     });
   }
+
+ 
+
 
 }
 

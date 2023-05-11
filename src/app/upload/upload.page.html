@@ -9,7 +9,7 @@
 
 <ion-content>
   <ion-card>
-    <img alt="Silhouette of mountains" src="https://ionicframework.com/docs/img/demos/card-media.png" />
+    <img [src]="photo" />
     <ion-card-header>
       <ion-card-title>Scan document</ion-card-title>
       <!-- <ion-card-subtitle>Scan qr code</ion-card-subtitle> -->
@@ -27,14 +27,14 @@
     </div>
     <div *ngIf=" buton==true"><ion-card color="danger">
       <ion-card-header>
-        <ion-card-title>Document nom authentique</ion-card-title>
+        <ion-card-title>Document non authentique</ion-card-title>
       </ion-card-header>
       <ion-card-content>
         <!-- <ion-button expand="block" [routerLink]="['/releve']">Get document</ion-button> -->
       </ion-card-content>
     </ion-card>
   </div>
-  <ion-button expand="block" (click)="takePicture()">Take Picture <picture></picture></ion-button>
+  <ion-button expand="block" (click)="takePicture()">Open Scanner</ion-button>
   <ion-button (click)="addPhoto()" color="tertiary" expand="block">
     <ion-icon name="image" slot="start"></ion-icon>
     Ouvrir la bibliothèque

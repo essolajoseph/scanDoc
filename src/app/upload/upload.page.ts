@@ -10,6 +10,7 @@ import { LoadingController, NavController } from '@ionic/angular';
 import { MyserviceService } from '../api/myservice.service';
 import * as CryptoJS from 'crypto-js';
 import { WebView } from '@ionic-native/ionic-webview/ngx';
+import { DocumentScanner, DocumentScannerOptions } from '@ionic-native/document-scanner/ngx';
 
 
 @Component({
@@ -28,7 +29,10 @@ export class UploadPage {
   donneesRecus:any;
   butonAuth=false;
   buton=false;
-  constructor(private camera: Camera,private getInfo:GetInformationService,private orthographeService: OrthographeService,private http: HttpClient,public loadingController: LoadingController,private myService:MyserviceService,private navController: NavController,private webview: WebView) {
+  data?: string;
+  photo?: string;
+  selectedImage?: string;
+  constructor(private camera: Camera,private getInfo:GetInformationService,private orthographeService: OrthographeService,private http: HttpClient,public loadingController: LoadingController,private myService:MyserviceService,private navController: NavController,private webview: WebView,private documentScanner: DocumentScanner) {
     this.client = new TextractClient({
       region: "us-east-1",
       credentials: {
@@ -54,8 +58,9 @@ export class UploadPage {
         mediaType: this.camera.MediaType.PICTURE,
       };
       const imageData = await this.camera.getPicture(options).then((imageData) => {
-       this.base64='data:image/jpeg;base64,'+imageData;
-    
+        let finalImage=this.webview.convertFileSrc(imageData);
+        this.photo=finalImage;
+       this.base64='data:image/jpeg;base64,'+imageData; 
         this.uploadPhoto();
       }, (err) => {
         console.log(err);
@@ -90,7 +95,7 @@ export class UploadPage {
       if(info!=null){
         loading.dismiss();
       console.log("Filiere :"+info.filiere+"\n faculte :"+info.faculte+"\n matricule :"+info.matricule+"\n niveau :"+info.niveau+"\nnumero du releve :"+info.numeroReleve+"\nannee Scolaire :"+info.annee+"\nmgp :"+info.mgp+"\ndecision :"+info.decision+"\n");
-       this.sendData(info);
+      //  this.sendData(info);
       }
       
     } catch (err) {
@@ -123,6 +128,8 @@ async openLibrary() {
     sourceType: this.camera.PictureSourceType.PHOTOLIBRARY
   };
   return await this.camera.getPicture(options).then((imageData) => {
+    let finalImage=this.webview.convertFileSrc(imageData);
+    this.photo=finalImage;
     this.base64='data:image/jpeg;base64,'+imageData;
      this.uploadPhoto();
    }, (err) => {
@@ -130,19 +137,6 @@ async openLibrary() {
    });;
 }
     
-sendData(info:Information) {
-  const jsonData = JSON.stringify(info);
-  const secretKey = 'MaCléSecrète';
-  const hmac = CryptoJS.HmacSHA256(jsonData, secretKey).toString();
-  this.myService.sendData({info,hmac}).subscribe((response:any) => {
-    console.log('Réponse du serveur:', response);
-    if(response==info.matricule)
-    alert("Document Authentique");
-    else
-    alert("Document Non Authentque");
-  });
-}
-
   async uploadPhoto() {
   const loading = await this.loadingController.create({
     message: 'Please wait...',
@@ -154,15 +148,19 @@ sendData(info:Information) {
   headers.append('Accept', 'application/json');
   let formData=new FormData();
   formData.append('file',this.base64);
-  console.log(formData);
   this.http.post(url, formData, { headers }).subscribe((response:any)=> {
     console.log('La photo a été envoyée avec succès',response);
     loading.dismiss();
-    if(response!=null) {
+    if(response.message=='ok') {
       this.donneesRecus=response;
       this.butonAuth=true;
       this.buton=false;
-      console.log(response[0].etudiant);
+      // alert(response.text);
+    }else{
+      if(response.message=='no'){
+        this.butonAuth=false;
+        this.buton=true;
+      }
     }
    
   }, error => {
@@ -178,4 +176,5 @@ sendData(info:Information) {
 sendReceiveData(){
   this.navController.navigateForward('/releve', { state: this.donneesRecus });   
 }
+
 }
