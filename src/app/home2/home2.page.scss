@@ -1,0 +1,67 @@
+ion-content {
+    --ion-background-color: #e1eaf6;
+  }
+  ion-toolbar{
+    --background:transparent;
+    --ion-color-base : transparent !important;
+  }
+  
+  .sign-btn{
+  
+    margin-top: 20px;
+    text-align: center;
+  }
+  
+  .image{
+    width: 100% !important;
+    height: auto !important;
+  }
+  
+  .ta-text{
+    margin-top: 40px;
+    text-align: center;
+    span{
+      font-size: 13px;
+      font-weight: normal;
+      color: #898585;
+    }
+  }
+  .Social-btn{
+    text-align: center;
+    ion-button{
+      width: 30px;
+      padding-left: 5px !important;
+    }
+  }
+  
+  ion-card{
+    --background:transparent;
+    box-shadow: none !important;
+  }
+  
+  ion-card-title{
+  
+    margin: 30px;
+    font-size: 50px;
+    color: black;
+    text-align:center;
+    font-weight: 400;
+  }
+  
+  ion-card-subtitle{
+    margin-top: 15px;
+    font-size: 12px;
+    color: darkgrey;
+    text-align: center;
+    font-weight: 200;
+  }
+  .wrapForm{
+    margin-top: 30px;
+  }
+
+  ion-item{
+
+    ion-input{
+        color: #647b9d;
+    }
+  }

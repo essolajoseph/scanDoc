@@ -6,7 +6,7 @@ import { OrthographeService } from '../api/text-dection.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { GetInformationService } from '../api/get-information.service';
 import { Information } from 'src/models/information.model';
-import { LoadingController, NavController } from '@ionic/angular';
+import { AlertController, LoadingController, NavController } from '@ionic/angular';
 import { MyserviceService } from '../api/myservice.service';
 import * as CryptoJS from 'crypto-js';
 import { WebView } from '@ionic-native/ionic-webview/ngx';
@@ -32,7 +32,14 @@ export class UploadPage {
   data?: string;
   photo?: string;
   selectedImage?: string;
-  constructor(private camera: Camera,private getInfo:GetInformationService,private orthographeService: OrthographeService,private http: HttpClient,public loadingController: LoadingController,private myService:MyserviceService,private navController: NavController,private webview: WebView,private documentScanner: DocumentScanner) {
+  constructor(private camera: Camera,
+    private getInfo:GetInformationService,
+    private http: HttpClient,
+    public loadingController: LoadingController,
+    private navController: NavController,
+    private webview: WebView,
+    private documentScanner: DocumentScanner,
+    private alertController:  AlertController) {
     this.client = new TextractClient({
       region: "us-east-1",
       credentials: {
@@ -156,12 +163,18 @@ async openLibrary() {
       this.butonAuth=true;
       this.buton=false;
       // alert(response.text);
-    }else{
-      if(response.message=='no'){
-        this.butonAuth=false;
-        this.buton=true;
-      }
     }
+    else if(response.message=='no'){
+        this.butonAuth=false;
+        this.buton=true;    
+    }
+    else if(response.message=='ls'){
+       this.afficherAlerte('La lumisoté de votre image trop elevée, veillez capturer une photo avec une lumisité moyenne');
+    }
+    else if(response.message=='li'){
+      this.afficherAlerte('La lumisoté de votre image trop abaissée, veillez capturer une photo avec une lumisité moyenne');
+    }
+       
    
   }, error => {
     console.log('Erreur lors de l\'envoi de la photo', error);
@@ -174,7 +187,18 @@ async openLibrary() {
 }
 
 sendReceiveData(){
-  this.navController.navigateForward('/releve', { state: this.donneesRecus });   
+  this.navController.navigateForward('/releve', { state: this.donneesRecus });  
+  this.buton=false;
+  this.butonAuth=false; 
+}
+
+async afficherAlerte(message:string) {
+  const alerte = await this.alertController.create({
+    header: 'Message',
+    message: message,
+    buttons: ['OK']
+  });
+  await alerte.present();
 }
 
 }

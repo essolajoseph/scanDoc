@@ -1,0 +1,26 @@
+<ion-content [fullscreen]="true">
+  <ion-card class="ion-no-margin">
+    <img src="../../assets/IonicAssets/header1.png" alt="" srcset="" class="image">
+    <ion-card-header>
+      <ion-card-title>
+        Login
+      </ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <div class="wrapForm">
+        <ion-item>
+          <ion-icon name="mail-outline"></ion-icon>
+          <ion-input type="text" name="email" [(ngModel)]="email" placeholder="exemple@gmail.com" required color="primary"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-icon name="lock-closed-outline"></ion-icon>
+          <ion-input type="password" name="password" [(ngModel)]="password" placeholder="***************" required></ion-input>
+        </ion-item>
+      </div>
+      <div class="sign-btn">
+        <ion-button fill="solid" shape="round" class="login-btn" routerLink="/home1">Login</ion-button>
+        <ion-button fill="outline" shape="round" color="dark" class="login-btn" (click)="login()" >Cancel</ion-button>
+      </div>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

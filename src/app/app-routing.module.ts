@@ -11,10 +11,7 @@ const routes: Routes = [
     redirectTo: 'home',
     pathMatch: 'full'
   },
-  {
-    path: 'scanner',
-    loadChildren: () => import('./scanner/scanner.module').then( m => m.ScannerPageModule)
-  },
+
   {
     path: 'releve',
     loadChildren: () => import('./releve/releve.module').then( m => m.RelevePageModule)
@@ -26,6 +23,18 @@ const routes: Routes = [
   {
     path: 'correction',
     loadChildren: () => import('./correction/correction.module').then( m => m.CorrectionPageModule)
+  },
+  {
+    path: 'scan',
+    loadChildren: () => import('./scan/scan.module').then( m => m.ScanPageModule)
+  },
+  {
+    path: 'home1',
+    loadChildren: () => import('./home1/home1.module').then( m => m.Home1PageModule)
+  },
+  {
+    path: 'home2',
+    loadChildren: () => import('./home2/home2.module').then( m => m.Home2PageModule)
   },
 ];
 

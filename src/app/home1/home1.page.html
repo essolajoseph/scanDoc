@@ -1,0 +1,58 @@
+<ion-content>
+  <div class="main_content_div">
+     <ion-buttons slot="start" class="menu_btn">
+         <ion-menu-button color="light"></ion-menu-button>
+     </ion-buttons>
+
+     <div class="user_div">
+        <div class="first_div">
+          <ion-label class="welcome">Bienvenu(e)</ion-label>
+          <ion-label class="username">{{user.name?user.name:''}}</ion-label>
+        </div>
+        <div class="user_back" [style.backgroundImage]="'url(assets/icon/favicon.png)'"></div>
+     </div>
+    <div class="content_div animated bounceInUp">
+      <ion-label class="hello_lbl">Hello, please Shoose your operation</ion-label>
+      <ion-grid fixed>
+        <ion-row>
+          <ion-col size="6"  routerLink="/upload">
+            <div class="col_div">
+              <img src="../../assets/IonicAssets/ocr1.jpg" >
+              <ion-label>Scan document with Ocr </ion-label>
+            </div>
+          </ion-col>
+          <ion-col size="6"  >
+            <div class="col_div" routerLink="/scan">
+              <img src="../../assets/IonicAssets/qrscanner.jpg" >
+              <ion-label>Scan  Qr code </ion-label>
+            </div>
+          </ion-col>
+          <ion-col size="6"  >
+            <div class="col_div">
+              <img src="../../assets/IonicAssets/student_male.png" >
+              <ion-label>List of students</ion-label>
+            </div>
+          </ion-col>
+          <ion-col size="6"  >
+            <div class="col_div">
+              <img src="../../assets/IonicAssets/administrateur.jpg" >
+              <ion-label>administrator</ion-label>
+            </div>
+          </ion-col>
+          <ion-col size="6"  >
+            <div class="col_div">
+              <img src="../../assets/IonicAssets/help.jpg" >
+            </div>
+          </ion-col>
+          <ion-col size="6"  >
+            <div class="col_div">
+              <img src="../../assets/IonicAssets/logoutt.jpg" >
+            </div>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+
+  </div>
+
+</ion-content>
