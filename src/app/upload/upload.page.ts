@@ -2,13 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
 import { TextractClient, AnalyzeDocumentCommand } from '@aws-sdk/client-textract';
 import { from } from 'rxjs';
-import { OrthographeService } from '../api/text-dection.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { GetInformationService } from '../api/get-information.service';
 import { Information } from 'src/models/information.model';
 import { AlertController, LoadingController, NavController } from '@ionic/angular';
-import { MyserviceService } from '../api/myservice.service';
-import * as CryptoJS from 'crypto-js';
 import { WebView } from '@ionic-native/ionic-webview/ngx';
 import { DocumentScanner, DocumentScannerOptions } from '@ionic-native/document-scanner/ngx';
 
@@ -149,7 +146,7 @@ async openLibrary() {
     message: 'Please wait...',
   });
   await loading.present();
-  const url = 'http://192.168.43.108:8000/api/endpoint';
+  const url = 'http://192.168.43.109:8000/api/endpoint';
   const headers = new HttpHeaders();
   headers.append('Content-Type', 'multipart/form-data');
   headers.append('Accept', 'application/json');

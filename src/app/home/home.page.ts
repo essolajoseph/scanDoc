@@ -7,6 +7,7 @@ import { MyserviceService } from '../api/myservice.service';
 import { Platform } from '@ionic/angular';
 
 
+
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
@@ -70,7 +71,10 @@ export class HomePage implements OnInit {
   }
 
  
+arreterApplication() {
+  (navigator as any).app.exitApp();
 
+}
 
 }
 

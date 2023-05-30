@@ -69,6 +69,7 @@
     "cordova-plugin-device": "2.0.2",
     "cordova-plugin-document-scanner": "^4.2.7",
     "cordova-plugin-exit": "^1.0.3",
+    "cordova-plugin-exitapp": "^1.0.0",
     "cordova-plugin-file": "^7.0.0",
     "cordova-plugin-ionic-keyboard": "^2.0.5",
     "cordova-plugin-ionic-webview": "^5.0.0",
@@ -109,7 +110,8 @@
         "ANDROIDX_WEBKIT_VERSION": "1.4.0"
       },
       "cordova-plugin-ionic-webview": {},
-      "cordova-plugin-exit": {}
+      "cordova-plugin-exit": {},
+      "cordova.custom.plugins.exitapp": {}
     },
     "platforms": [
       "browser",

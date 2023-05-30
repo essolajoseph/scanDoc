@@ -8,7 +8,7 @@ ion-content {
   
   .sign-btn{
   
-    margin-top: 20px;
+    margin-top: 50px;
     text-align: center;
   }
   
@@ -56,7 +56,7 @@ ion-content {
     font-weight: 200;
   }
   .wrapForm{
-    margin-top: 30px;
+    margin-top: -50px;
   }
 
   ion-item{
@@ -64,4 +64,7 @@ ion-content {
     ion-input{
         color: #647b9d;
     }
+  }
+  ion-card-title{
+    margin-top: -300px;
   }
