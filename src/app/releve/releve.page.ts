@@ -16,8 +16,8 @@ export class RelevePage implements OnInit {
   ngOnInit() {
     this.donneesRecus= history.state;
       this.notes=this.donneesRecus.notes;
-      this.releve=this.donneesRecus.releve[0];
-      this.etudiant=this.donneesRecus.etudiant[0];
+      this.releve=this.donneesRecus.releve;
+      this.etudiant=this.donneesRecus.etudiant;
       // alert(this.etudiant.nom);
   }
   

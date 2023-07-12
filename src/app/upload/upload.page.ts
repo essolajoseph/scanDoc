@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
-import { TextractClient, AnalyzeDocumentCommand } from '@aws-sdk/client-textract';
 import { from } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { GetInformationService } from '../api/get-information.service';
 import { Information } from 'src/models/information.model';
 import { AlertController, LoadingController, NavController } from '@ionic/angular';
 import { WebView } from '@ionic-native/ionic-webview/ngx';
-import { DocumentScanner, DocumentScannerOptions } from '@ionic-native/document-scanner/ngx';
+// import { DocumentScanner, DocumentScannerOptions } from '@ionic-native/document-scanner/ngx';
+
 
 
 @Component({
@@ -16,7 +16,6 @@ import { DocumentScanner, DocumentScannerOptions } from '@ionic-native/document-
   styleUrls: ['./upload.page.scss'],
 })
 export class UploadPage {
-  client: TextractClient;
   image: any;
   texte = '';
   erreurs:any;
@@ -29,26 +28,17 @@ export class UploadPage {
   data?: string;
   photo?: string;
   selectedImage?: string;
+  send?: boolean;
   constructor(private camera: Camera,
     private getInfo:GetInformationService,
     private http: HttpClient,
     public loadingController: LoadingController,
     private navController: NavController,
     private webview: WebView,
-    private documentScanner: DocumentScanner,
+    // private documentScanner: DocumentScanner,
+    // private documentScanner: DocumentScanner,
     private alertController:  AlertController) {
-    this.client = new TextractClient({
-      region: "us-east-1",
-      credentials: {
-        accessKeyId: "AKIAZDHOG23RVZA73SMG",
-        secretAccessKey: "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"
-      }
-    });
 
-    this.http.get<string[]>('../../assets/dictionnaire/dictionnaire.json').subscribe(mots => {
-      this.dictionnaire = new Set<string>(mots);
-      console.log(this.dictionnaire);
-    });
   }
 
 
@@ -64,8 +54,8 @@ export class UploadPage {
       const imageData = await this.camera.getPicture(options).then((imageData) => {
         let finalImage=this.webview.convertFileSrc(imageData);
         this.photo=finalImage;
-       this.base64='data:image/jpeg;base64,'+imageData; 
-        this.uploadPhoto();
+        this.base64='data:image/jpeg;base64,'+imageData; 
+        this.send=true;
       }, (err) => {
         console.log(err);
       });
@@ -75,48 +65,7 @@ export class UploadPage {
     }
   }
 
-  async sendImageToApi(imageData: string) {
-    const loading = await this.loadingController.create({
-      message: 'Please wait...',
-    });
-    await loading.present();
-    const buffer = this.base64ToArrayBuffer(imageData);
-    const bytes = new Uint8Array(buffer);
-    const params = {
-      Document: {
-        Bytes: bytes,
-      },
-      FeatureTypes: ['TABLES', 'FORMS'],
-    };
-    const command = new AnalyzeDocumentCommand(params);
   
-    try {
-      const response = await from(this.client.send(command)).toPromise();
-      const textBlocks = response?.Blocks?.filter(b => b.BlockType === 'LINE') ?? [];
-      const text = textBlocks.map(tb => tb.Text).join(' ');
-      console.log(text);
-      let info=this.getInfo.extraireInformations(text);
-      if(info!=null){
-        loading.dismiss();
-      console.log("Filiere :"+info.filiere+"\n faculte :"+info.faculte+"\n matricule :"+info.matricule+"\n niveau :"+info.niveau+"\nnumero du releve :"+info.numeroReleve+"\nannee Scolaire :"+info.annee+"\nmgp :"+info.mgp+"\ndecision :"+info.decision+"\n");
-      //  this.sendData(info);
-      }
-      
-    } catch (err) {
-      alert("Document pas clair!!!");
-    }
-  }
-  
-  base64ToArrayBuffer(base64: string): ArrayBuffer {
-    const binaryString = atob(base64);
-    const len = binaryString.length;
-    const bytes = new Uint8Array(len);
-    for (let i = 0; i < len; i++) {
-      bytes[i] = binaryString.charCodeAt(i);
-    }
-    return bytes.buffer;
-  }
-
   async addPhoto() {
     const libraryImage = await this.openLibrary();
       // await this.sendImageToApi(libraryImage);
@@ -135,10 +84,10 @@ async openLibrary() {
     let finalImage=this.webview.convertFileSrc(imageData);
     this.photo=finalImage;
     this.base64='data:image/jpeg;base64,'+imageData;
-     this.uploadPhoto();
+    this.send=true;
    }, (err) => {
      console.log(err);
-   });;
+   });
 }
     
   async uploadPhoto() {
@@ -146,7 +95,7 @@ async openLibrary() {
     message: 'Please wait...',
   });
   await loading.present();
-  const url = 'http://192.168.43.109:8000/api/endpoint';
+  const url = 'http://192.168.43.108:8000/api/endpoint';
   const headers = new HttpHeaders();
   headers.append('Content-Type', 'multipart/form-data');
   headers.append('Accept', 'application/json');
@@ -171,6 +120,10 @@ async openLibrary() {
     else if(response.message=='li'){
       this.afficherAlerte('La lumisoté de votre image trop abaissée, veillez capturer une photo avec une lumisité moyenne');
     }
+    else if(response.message=='pas'){
+      this.afficherAlerte('L\'image  n\'est pas bien capturée \nVeiller très bien capturer le document');
+    }
+
        
    
   }, error => {
@@ -197,5 +150,12 @@ async afficherAlerte(message:string) {
   });
   await alerte.present();
 }
+
+// test(){
+//    let opts: DocumentScannerOptions = {};
+//    this.documentScanner.scanDocument(opts)
+//   .then((res: string) => console.log(res))
+//   .catch((error: any) => console.error(error));
+// }
 
 }

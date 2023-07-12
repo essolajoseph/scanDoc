@@ -9,7 +9,7 @@
 
 <ion-content>
   <ion-card>
-    <img [src]="photo" />
+    <img src="{{base64}}"/>
     <ion-card-header>
       <ion-card-title>Scan document</ion-card-title>
       <!-- <ion-card-subtitle>Scan qr code</ion-card-subtitle> -->
@@ -40,6 +40,12 @@
         <ion-icon name="image" slot="start"></ion-icon>
         Ouvrir la bibliothèque
       </ion-button>
+      <div *ngIf="send==true">
+        <ion-button (click)="uploadPhoto()" color="tertiary" expand="block">
+          <ion-icon name="image" slot="start"></ion-icon>
+          Envoyer la photo
+        </ion-button>
+      </div>
     </ion-card-content>
   </ion-card>
 </ion-content>

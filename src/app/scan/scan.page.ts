@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { BarcodeScanner, BarcodeScannerOptions } from '@ionic-native/barcode-scanner/ngx';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { LoadingController, NavController } from '@ionic/angular';
+import { AlertController, LoadingController, NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-scan',
@@ -18,7 +18,7 @@ export class ScanPage implements OnInit {
   buton?:boolean;
   info: any;
   donneesRecus: any;
-  constructor(private barcodeScanner: BarcodeScanner,private http: HttpClient,public loadingController: LoadingController,private navController: NavController) { }
+  constructor(private barcodeScanner: BarcodeScanner,private http: HttpClient,public loadingController: LoadingController,private navController: NavController,private alertController:  AlertController) { }
   ngOnInit(){
     this.butonAuth=false;
     this.buton=false;
@@ -40,7 +40,7 @@ export class ScanPage implements OnInit {
       this.scannedData = barcodeData.text;
       let splitArray=this.scannedData.split(/\s+/);
       this.info={hache:splitArray[0],matricule:splitArray[1],niveau:splitArray[2]+" "+splitArray[3]};
-      const url = 'http://192.168.43.109:8000/api/decode';
+      const url = 'http://192.168.43.108:8000/api/decode';
       const headers = new HttpHeaders();
       headers.append('Content-Type', 'multipart/form-data');
       headers.append('Accept', 'application/json');
@@ -50,6 +50,7 @@ export class ScanPage implements OnInit {
           this.donneesRecus=response;
           this.butonAuth=true;
           this.buton=false;
+          this.afficherAlerte();
         }
         else if(response.message=='no'){
           this.butonAuth=false;
@@ -80,5 +81,15 @@ export class ScanPage implements OnInit {
     this.buton=false;
     this.navController.navigateForward('/releve', { state: this.donneesRecus }); 
   }
+
+  
+async afficherAlerte() {
+  const alerte = await this.alertController.create({
+    header: 'Information d\'entete lues sur le Qr code',
+    message: 'Nom : ' + this.donneesRecus.etudiant.nom+'\nPrenom : ' + this.donneesRecus.etudiant.prenom+'\n'+'Né(e) le : ' + this.donneesRecus.etudiant.date_naissance+'\n'+'Matricule : ' + this.donneesRecus.releve.etudiant+'\n'+'Niveau : ' + this.donneesRecus.releve.niveau+'\n'+'Filiere : ' + this.donneesRecus.releve.filiere+'\n'+'Année Académiques : ' + this.donneesRecus.releve.anneeAcademique,
+    buttons: ['OK']
+  });
+  await alerte.present();
+}
 
 }

@@ -28,7 +28,7 @@ export class Home2Page implements OnInit {
       });
       await loading.present();
       let data={email:this.email, password:this.password}
-      const url = 'http://192.168.43.109:8000/api/getUser';
+      const url = 'http://192.168.43.108:8000/api/getUser';
       const headers = new HttpHeaders();
       headers.append('Content-Type', 'multipart/form-data');
       headers.append('Accept', 'application/json');

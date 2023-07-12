@@ -1,0 +1,105 @@
+@media (max-width: 767px) {
+    .container-lg {
+      padding: 10px;
+    }
+  
+    .default_option {
+      display: flex;
+      flex-direction: column;
+      padding-top: 10px;
+      padding-bottom: 10px;
+      padding-left: 10px;
+      padding-right: 10px;
+    }
+  
+    .w-100 {
+      width: 100%;
+    }
+  
+    .d-flex {
+      display: flex;
+    }
+  
+    .flex-column {
+      flex-direction: column;
+    }
+  
+    .py-5 {
+      padding-top: 5px;
+      padding-bottom: 5px;
+    }
+  
+    .px-5 {
+      padding-left: 5px;
+      padding-right: 5px;
+    }
+  
+    .header {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+  
+    .align-items-center {
+      align-items: center;
+    }
+  
+    .justify-content-between {
+      justify-content: space-between;
+    }
+  
+    .content-state-data,
+    .content-state-data-alt {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+  
+    .content-state-data span,
+    .content-state-data-alt span {
+      font-size: 12px;
+    }
+  
+    .content-uy1-logo {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  
+    .imgatt,
+    .img-fluid {
+      max-width: 100%;
+      height: auto;
+    }
+  }
+  @media (max-width: 767px) {
+    .default_option span {
+      font-size: 12px;
+    }
+  }
+  @media (max-width: 375px) {
+    .default_option span {
+        font-size: 7px !important;
+      }
+  }    
+  span {
+    display: inline-block;
+    margin: 0;
+    white-space: normal;
+  }
+
+  span.lo {
+    font-weight: bold;
+    font-size: 7px;
+  }
+  
+  span.fs-2 {
+    font-weight: bold;
+    font-size: 12px;
+  }
+  
+  span.lo,
+  span.fs-2 {
+    margin: 0;
+  }
+  
