@@ -130,6 +130,7 @@ async openLibrary() {
     console.log('Erreur lors de l\'envoi de la photo', error);
     this.buton=true;
     this.butonAuth=false;
+    this.afficherAlerte("Erreur lors de l\'envoi de la photo.\n Verifier votre connexion Internet ou Verifier si le document est dans les archives");
     loading.dismiss();
   });
 

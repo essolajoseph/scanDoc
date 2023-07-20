@@ -1,0 +1,78 @@
+/* app.scss */
+
+page-archives {
+    ion-card {
+      margin: 20px;
+      background-color: #fff;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      overflow: hidden;
+      
+      ion-card-header {
+        background-color: #4b8be8;
+        padding: 16px;
+        color: #fff;
+        
+        ion-card-title {
+          font-size: 24px;
+          font-weight: bold;
+          margin-bottom: 8px;
+        }
+        
+        ion-card-subtitle {
+          font-size: 16px;
+          opacity: 0.8;
+        }
+      }
+      
+      ion-card-content {
+        padding: 16px;
+        
+        ion-list {
+          ion-item {
+            ion-label {
+              color: #333;
+              font-weight: bold;
+              margin-bottom: 4px;
+            }
+            
+            ion-input {
+              border: none;
+              background-color: #f2f2f2;
+              border-radius: 4px;
+              padding: 10px;
+              margin-bottom: 10px;
+              
+              --color: #333;
+              --placeholder-color: #999;
+            }
+  
+          }
+
+    
+        }
+        
+        ion-button {
+          margin-top: 16px;
+          --ion-background-color: #4b8be8;
+          --ion-text-color: #fff;
+          --background-hover: #3872b8;
+          --background-activated: #3872b8;
+          
+          &.secondary {
+            --ion-background-color: #f2f2f2;
+            --ion-text-color: #333;
+            --background-hover: #d9d9d9;
+            --background-activated: #ccc;
+          }
+          
+          &.danger {
+            --ion-background-color: #e74c3c;
+            --background-hover: #c93a2d;
+            --background-activated: #c93a2d;
+          }
+        }
+      }
+    }
+  }
+  
