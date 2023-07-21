@@ -18,6 +18,7 @@ export class ScanPage implements OnInit {
   buton?:boolean;
   info: any;
   donneesRecus: any;
+  typeDoc:any;
   constructor(private barcodeScanner: BarcodeScanner,private http: HttpClient,public loadingController: LoadingController,private navController: NavController,private alertController:  AlertController) { }
   ngOnInit(){
     this.butonAuth=false;
@@ -38,25 +39,27 @@ export class ScanPage implements OnInit {
     this.barcodeScanner.scan(options).then(barcodeData => {
       console.log('Barcode data', barcodeData);
       this.scannedData = barcodeData.text;
-      let splitArray=this.scannedData.split(/\s+/);
-      this.info={hache:splitArray[0],matricule:splitArray[1],niveau:splitArray[2]+" "+splitArray[3]};
+      let formData=new FormData();
+      formData.append('data',this.scannedData);
       const url = 'http://192.168.43.108:8000/api/decode';
       const headers = new HttpHeaders();
       headers.append('Content-Type', 'multipart/form-data');
       headers.append('Accept', 'application/json');
-      this.http.post(url, this.info, { headers }).subscribe((response:any)=> {
+      this.http.post(url, formData, { headers }).subscribe((response:any)=> {
         console.log('Les donnees été envoyées avec succès',response);
-        if(response.message=='ok'){
+        if(response.statut==200){
           this.donneesRecus=response;
           this.butonAuth=true;
           this.buton=false;
+          this.typeDoc=response.type;
           this.afficherAlerte();
         }
-        else if(response.message=='no'){
+        else if(response.statut==400){
           this.butonAuth=false;
           this.buton=true;
+          console.log(response.statut);
         }
-        else if(response.message=='no document'){
+        else if(response.statut==402){
           alert('Document ou Qr code non Reconnu');
           this.butonAuth=false;
           this.buton=false;
@@ -79,7 +82,15 @@ export class ScanPage implements OnInit {
   sendReceiveData(){
     this.butonAuth=false;
     this.buton=false;
-    this.navController.navigateForward('/releve', { state: this.donneesRecus }); 
+    if(this.typeDoc=='releve'){
+     this.navController.navigateForward('/releve', { state: this.donneesRecus }); 
+    }
+    else if(this.typeDoc=='attest'){
+      this.navController.navigateForward('/attestion', { state: this.donneesRecus }); 
+    }
+    console.log(this.typeDoc);
+
+   
   }
 
   

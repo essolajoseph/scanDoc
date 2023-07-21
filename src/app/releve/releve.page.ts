@@ -14,7 +14,7 @@ export class RelevePage implements OnInit {
   constructor(private router:Router, private route:ActivatedRoute) { }
 
   ngOnInit() {
-    this.donneesRecus= history.state;
+      this.donneesRecus= history.state;
       this.notes=this.donneesRecus.notes;
       this.releve=this.donneesRecus.releve;
       this.etudiant=this.donneesRecus.etudiant;
